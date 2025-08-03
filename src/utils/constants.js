@@ -1,0 +1,18 @@
+export const features = [
+    { name: "Air Conditioning", url: "https://demo09.houzez.co/feature/air-conditioning/" },
+    { name: "Barbeque", url: "https://demo09.houzez.co/feature/barbeque/" },
+    { name: "Dryer", url: "https://demo09.houzez.co/feature/dryer/" },
+    { name: "Gym", url: "https://demo09.houzez.co/feature/gym/" },
+    { name: "Laundry", url: "https://demo09.houzez.co/feature/laundry/" },
+    { name: "Lawn", url: "https://demo09.houzez.co/feature/lawn/" },
+    { name: "Microwave", url: "https://demo09.houzez.co/feature/microwave/" },
+    { name: "Outdoor Shower", url: "https://demo09.houzez.co/feature/outdoor-shower/" },
+    { name: "Refrigerator", url: "https://demo09.houzez.co/feature/refrigerator/" },
+    { name: "Sauna", url: "https://demo09.houzez.co/feature/sauna/" },
+    { name: "Security", url: "https://demo09.houzez.co/feature/security/" },
+    { name: "Swimming Pool", url: "https://demo09.houzez.co/feature/swimming-pool/" },
+    { name: "TV Cable", url: "https://demo09.houzez.co/feature/tv-cable/" },
+    { name: "Washer", url: "https://demo09.houzez.co/feature/washer/" },
+    { name: "WiFi", url: "https://demo09.houzez.co/feature/wifi/" },
+    { name: "Window Coverings", url: "https://demo09.houzez.co/feature/window-coverings/" },
+];
