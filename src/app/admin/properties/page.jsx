@@ -14,7 +14,7 @@ import {
     TableRow,
     Typography,
 } from "@mui/material";
-import ConfirmDialog from "@/app/admin/properties/ConfirmDialog";
+import ConfirmDialog from "@/app/admin/properties/confirmDialog";
 import PropertyModal from "@/app/admin/properties/propertyModel";
 import Logout from "@/app/admin/logout/logout";
 import {useRouter} from "next/navigation";
