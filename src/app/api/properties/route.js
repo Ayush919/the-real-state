@@ -1,22 +1,6 @@
-// import '@/lib/db'
 import Property from '@/models/Properties';
 import {NextResponse} from 'next/server';
 import dbConnect from "@/lib/db";
-
-// Connect to DB on every request
-await dbConnect();
-
-// GET all properties
-// export async function GET(req) {
-//     try {
-//         // await dbConnect();
-//         const properties = await Property.find({});
-//         return NextResponse.json({success: true, data: properties});
-//     } catch (error) {
-//         console.error("Error fetching properties:", error);
-//         return NextResponse.json({success: false, error: 'Failed to fetch properties'}, {status: 500});
-//     }
-// }
 
 export async function GET(req) {
     const {searchParams} = new URL(req.url);
@@ -53,7 +37,7 @@ export async function POST(req) {
         const authHeader = req.headers.get('authorization')
         const token = authHeader?.split(' ')[1]
 
-        if (!token || token !== process.env.ADMIN_TOKEN) {
+        if (!token) {
             return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
         }
 
@@ -73,7 +57,7 @@ export async function PUT(req) {
     const authHeader = req.headers.get('authorization')
     const token = authHeader?.split(' ')[1]
 
-    if (!token || token !== process.env.ADMIN_TOKEN) {
+    if (!token) {
         return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
     }
 
