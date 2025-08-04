@@ -25,7 +25,7 @@ export default function ContactForm() {
                 formBody.append(key, value);
             });
 
-            const res = await fetch("https://formsubmit.co/ajax/mathurayush82@gmail.com", {
+            const res = await fetch("https://formsubmit.co/ajax/${process.env.EMAIL_ID}", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded",
