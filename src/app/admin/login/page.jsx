@@ -41,7 +41,7 @@ export default function LoginPage() {
 
     return (
         <div className="min-h-screen bg-cover bg-center flex items-center justify-center"
-             style={{backgroundImage: "url(https://demo09.houzez.co/wp-content/uploads/2016/10/26-1170x877.jpg)"}}>
+             style={{backgroundImage: "url(https://demo09.houzez.co/wp-content/uploads/revslider/27.jpg)"}}>
             <div className="bg-white bg-opacity-90 rounded-2xl p-8 shadow-xl w-full max-w-md">
                 <h2 className="text-3xl font-bold mb-6 text-center text-green-700">Login</h2>
 
