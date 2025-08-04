@@ -1,4 +1,4 @@
-import Property from '@/models/Properties';
+import Property from '@/models/properties';
 import {NextResponse} from 'next/server';
 import dbConnect from "@/lib/db";
 
