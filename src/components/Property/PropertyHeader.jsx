@@ -25,7 +25,7 @@ export default function PropertyHeader({ property }) {
                     📍 {property.location}
                 </address>
                 <p className="text-emerald-400 text-2xl font-bold">
-                    ${property.price.toLocaleString()}
+                    ${property.price?.toLocaleString()}
                     {property.type === "rent" && <span className="text-base font-normal">/mo</span>}
                 </p>
             </div>
