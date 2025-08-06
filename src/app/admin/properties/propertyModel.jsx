@@ -1,141 +1,297 @@
 "use client";
-import React from "react";
-import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, MenuItem, TextField,} from "@mui/material";
+import React, {useEffect, useState} from "react";
+import {
+    Button,
+    Checkbox,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    FormControl,
+    Grid,
+    InputLabel,
+    ListItemText,
+    MenuItem,
+    OutlinedInput,
+    Select,
+    TextField,
+} from "@mui/material";
+import {uploadImageToUploadcare} from "@/lib/imageUpload";
+import {featureOptions} from "@/utils/constants";
 
 export default function AddPropertyModal({
                                              open,
                                              onClose,
                                              onSubmit,
                                              formValues,
-                                             onChange,
+                                             disabled,
                                          }) {
+    const [localFormValues, setLocalFormValues] = useState({});
+    const [isValid, setIsValid] = useState(false);
+    const [uploading, setUploading] = useState(false);
+    const [imageFiles, setImageFiles] = useState([]);
+
+    useEffect(() => {
+        setLocalFormValues({...formValues, type: formValues?.type || "sale"});
+    }, [formValues]);
+
+    useEffect(() => {
+        validateForm();
+    }, [localFormValues]);
+
+    const handleChange = (e) => {
+        const {name, value, files} = e.target;
+        console.log("handleChange : =: = :", name, value, files);
+        if (name === "images") {
+            const selectedFiles = Array.from(files);
+            setImageFiles(selectedFiles);
+        } else {
+            setLocalFormValues((prev) => ({
+                ...prev,
+                [name]: value,
+            }));
+        }
+    };
+
+    const validateForm = () => {
+        const requiredFields = [
+            "title",
+            "location",
+            "rooms",
+            "bathrooms",
+            "size",
+            "type",
+            "price",
+            "retailPrice",
+            "description",
+        ];
+        const isFilled = requiredFields.every(
+            (field) =>
+                localFormValues[field] !== undefined &&
+                localFormValues[field] !== null &&
+                localFormValues[field] !== ""
+        );
+
+        const hasAssets = imageFiles.length > 0;
+        setIsValid(isFilled && hasAssets);
+    };
+
+    const uploadToUploadcare = async () => {
+        const uploadedUrls = [];
+        for (const file of imageFiles) {
+            const url = await uploadImageToUploadcare(file);
+            uploadedUrls.push(url);
+        }
+        return uploadedUrls;
+    };
+
+    const handleSubmit = async () => {
+        try {
+            setUploading(true);
+            const uploadedImageUrls = await uploadToUploadcare();
+
+            const finalFormData = {
+                ...localFormValues,
+                images: uploadedImageUrls,
+            };
+
+            console.log("finalFormData :: ", finalFormData)
+            formValues = finalFormData; // Update formValues with the final data
+            onSubmit(finalFormData);
+            setUploading(false);
+        } catch (error) {
+            console.error("Image upload failed:", error);
+            setUploading(false);
+        }
+    };
+
     return (
         <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
-            <DialogTitle>Add Property</DialogTitle>
+            <DialogTitle>{formValues?._id ? "Update" : "Add"} Property</DialogTitle>
             <DialogContent>
                 <Grid container spacing={3}>
-                    {/* Row 1: Title + Location */}
-                    <Grid size={6} item>
+                    <Grid size={6} item xs={6}>
                         <TextField
                             label="Title"
                             name="title"
-                            value={formValues?.title}
-                            onChange={(e) => {
-                                onChange(e)
-                            }}
+                            value={localFormValues.title || ""}
+                            onChange={handleChange}
                             fullWidth
-                            variant="outlined"
+                            required
                         />
                     </Grid>
-                    <Grid size={6} item>
+                    <Grid size={6} item xs={6}>
                         <TextField
                             label="Location"
                             name="location"
-                            value={formValues?.location}
-                            onChange={(e) => onChange(e)}
+                            value={localFormValues.location || ""}
+                            onChange={handleChange}
                             fullWidth
-                            variant="outlined"
+                            required
                         />
                     </Grid>
-
-                    {/* Row 2: Rooms + Bathrooms */}
-                    <Grid item size={6}>
+                    <Grid size={6} item xs={6}>
                         <TextField
-                            label="Number of Rooms"
+                            label="Rooms"
                             name="rooms"
-                            value={formValues?.rooms}
-                            onChange={(e) => onChange(e)}
+                            value={localFormValues.rooms || ""}
+                            onChange={handleChange}
                             type="number"
                             fullWidth
-                            variant="outlined"
+                            required
                         />
                     </Grid>
-                    <Grid item size={6}>
+                    <Grid size={6} item xs={6}>
                         <TextField
-                            label="Number of Bathrooms"
+                            label="Bathrooms"
                             name="bathrooms"
-                            value={formValues?.bathrooms}
-                            onChange={(e) => onChange(e)}
+                            value={localFormValues.bathrooms || ""}
+                            onChange={handleChange}
                             type="number"
                             fullWidth
-                            variant="outlined"
+                            required
                         />
                     </Grid>
-
-                    {/* Row 3: Size + Property Type */}
-                    <Grid item size={6}>
+                    <Grid size={6} item xs={6}>
                         <TextField
                             label="Size (sq ft)"
                             name="size"
-                            value={formValues?.size}
-                            onChange={(e) => onChange(e)}
+                            value={localFormValues.size || ""}
+                            onChange={handleChange}
                             type="number"
                             fullWidth
-                            variant="outlined"
+                            required
                         />
                     </Grid>
-                    <Grid item size={6}>
+                    <Grid size={6} item xs={6}>
                         <TextField
                             label="Property Type"
                             name="type"
-                            value={formValues?.type}
-                            onChange={(e) => onChange(e)}
+                            value={localFormValues.type || ""}
+                            onChange={handleChange}
                             select
                             fullWidth
-                            variant="outlined"
+                            required
                         >
                             <MenuItem value="sale">Sale</MenuItem>
                             <MenuItem value="rent">Rent</MenuItem>
                         </TextField>
                     </Grid>
-
-                    {/* Row 4: Price + Images */}
-                    <Grid item size={6}>
+                    <Grid size={6} item xs={6}>
                         <TextField
                             label="Price"
                             name="price"
-                            value={formValues?.price}
-                            onChange={(e) => onChange(e)}
+                            value={localFormValues.price || ""}
+                            onChange={handleChange}
                             type="number"
                             fullWidth
-                            variant="outlined"
+                            required
                         />
                     </Grid>
-                    <Grid item size={6}>
+                    <Grid size={6} item xs={6}>
                         <TextField
-                            label="Images (comma-separated URLs)"
-                            name="images"
-                            value={formValues?.images}
-                            onChange={(e) => onChange(e)}
+                            label="Retail Price"
+                            name="retailPrice"
+                            value={localFormValues.retailPrice || ""}
+                            onChange={handleChange}
+                            type="number"
                             fullWidth
-                            variant="outlined"
+                            required
                         />
+                    </Grid>
+                    <Grid size={6} item xs={12} sm={6}>
+                        <FormControl fullWidth>
+                            <InputLabel id="features-label">Features</InputLabel>
+                            <Select
+                                labelId="features-label"
+                                multiple
+                                name="features"
+                                value={localFormValues.features || []} // ✅ bind to local state
+                                onChange={(e) =>
+                                    setLocalFormValues((prev) => ({
+                                        ...prev,
+                                        features: e.target.value,
+                                    }))
+                                }
+                                input={<OutlinedInput label="Features"/>}
+                                renderValue={(selected) => selected.join(", ")}
+                                variant="outlined"
+                            >
+                                {featureOptions.map((feature) => (
+                                    <MenuItem key={feature} value={feature}>
+                                        <Checkbox checked={localFormValues.features?.includes(feature)}/>
+                                        <ListItemText primary={feature}/>
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
                     </Grid>
 
-                    {/* Row 5: Full-width Description */}
-                    <Grid item size={6}>
+
+                    <Grid size={6} item xs={6} row={1}>
+                        <Button variant="outlined" component="label" sx={{height: 55}} fullWidth>
+                            Upload Images
+                            <input
+                                type="file"
+                                name="images"
+                                accept="image/*"
+                                multiple
+                                hidden
+                                onChange={handleChange}
+                            />
+                        </Button>
+                        <Grid container spacing={2} mt={1}>
+                            {imageFiles.map((file, index) => (
+                                <Grid item xs={4} key={index}>
+                                    <img
+                                        src={URL.createObjectURL(file)}
+                                        alt={`preview-${index}`}
+                                        style={{
+                                            width: "100%",
+                                            height: 100,
+                                            objectFit: "cover",
+                                            borderRadius: 4,
+                                        }}
+                                    />
+                                </Grid>
+                            ))}
+                        </Grid>
+
+                    </Grid>
+                    <Grid size={12} item xs={12}>
                         <TextField
                             label="Description"
                             name="description"
-                            value={formValues?.description}
-                            onChange={(e) => onChange(e)}
+                            value={localFormValues.description || ""}
+                            onChange={handleChange}
                             fullWidth
                             multiline
                             rows={3}
-                            variant="outlined"
+                            required
                         />
                     </Grid>
+
                 </Grid>
             </DialogContent>
-
             <DialogActions sx={{p: 2}}>
-                <Button onClick={onClose} variant="outlined">
+                <Button onClick={() => {
+                    onClose()
+                    setImageFiles([])
+                    setLocalFormValues({})
+                }}
+                        variant="outlined">
                     Cancel
                 </Button>
-                <Button onClick={() => onSubmit(formValues)} variant="contained" color="primary">
-                    {formValues?._id ? "Update" : "Add"}
+                <Button
+                    onClick={handleSubmit}
+                    disabled={!isValid || uploading}
+                    variant="contained"
+                    color="primary"
+                >
+                    {uploading ? "Uploading..." : formValues?._id ? "Update" : "Add"}
                 </Button>
             </DialogActions>
         </Dialog>
     );
 }
+
