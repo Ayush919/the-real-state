@@ -1,4 +1,4 @@
-// app/admin/properties/page.tsx
+
 "use client";
 import {useEffect, useState} from "react";
 import {styled} from '@mui/material/styles';
@@ -14,7 +14,7 @@ import {
     TableRow,
     Typography,
 } from "@mui/material";
-import ConfirmDialog from "@/app/admin/properties/confirmDialog";
+import ConfirmDialog from "@/app/admin/properties/ConfirmDialog";
 import PropertyModal from "@/app/admin/properties/propertyModel";
 import Logout from "@/app/admin/logout/logout";
 import {useRouter} from "next/navigation";
@@ -44,12 +44,13 @@ const StyledTableRow = styled(TableRow)(({theme}) => ({
 export default function PropertiesPage() {
     const router = useRouter();
     const [properties, setProperties] = useState([]);
-    const [editProperty, setEditProperty] = useState(null);
+    const [editProperty, setEditProperty] = useState({type: "sale"});
     const [openModal, setOpenModal] = useState(false);
     const [confirmDelete, setConfirmDelete] = useState(null);
     const [page, setPage] = useState(0); // MUI starts pages at index 0
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [isAuthenticated, setIsAuthenticated] = useState(false)
+    const [disabled, setDisabled] = useState(true)
 
 
     useEffect(() => {
@@ -64,9 +65,10 @@ export default function PropertiesPage() {
         fetchProperties();
     }, []);
 
-    const handleSubmit = async () => {
-        const method = editProperty?._id ? "PUT" : "POST";
-        const url = editProperty?._id ? `/api/properties/${editProperty._id}` : "/api/properties";
+    const handleSubmit = async (data) => {
+        console.log("handleSubmit : =: = :", editProperty,data)
+        const method = data?._id ? "PUT" : "POST";
+        const url = data?._id ? `/api/properties/${data._id}` : "/api/properties";
         const token = localStorage.getItem('token')
 
         const res = await fetch(url, {
@@ -74,7 +76,7 @@ export default function PropertiesPage() {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`,
             },
-            body: JSON.stringify(editProperty),
+            body: JSON.stringify(data),
         });
 
         onClose(); // close modal & refresh list in parent
@@ -88,10 +90,12 @@ export default function PropertiesPage() {
 
     const handleChange = (e) => {
         const {name, value} = e?.target;
+        console.log("handleChange : =: = :", name, value)
         setEditProperty((prev) => ({
             ...prev,
             [name]: value,
         }));
+        validateForm()
     };
 
     const fetchProperties = async () => {
@@ -106,16 +110,27 @@ export default function PropertiesPage() {
         setOpenModal(true);
     };
 
+    const validateForm = () => {
+        if (!properties || properties?.title === "" || properties?.location === "" || properties?.rooms === "" ||
+            properties?.bathrooms === "" || properties?.type === "" || properties?.price === "" ||
+            properties?.images === "" || properties?.description === "") {
+            console.log("inside data : =: = :")
+            setDisabled(true)
+        } else {
+            setDisabled(false)
+        }
+    }
 
     const handleDelete = async (id) => {
         const token = localStorage.getItem('token')
 
         await fetch(`/api/properties/${id}`, {
+            method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`,
             },
-        }, {method: "DELETE"});
+        });
         await fetchProperties();
         setConfirmDelete(null);
     };
@@ -143,7 +158,7 @@ export default function PropertiesPage() {
                 </TableHead>
 
                 <TableBody>
-                    {properties.length === 0 ? (
+                    {properties?.length === 0 ? (
                         <TableRow>
                             <TableCell colSpan={8} align="center" sx={{border: '1px solid #ccc'}}>
                                 No properties found.
@@ -217,6 +232,8 @@ export default function PropertiesPage() {
                 onSubmit={handleSubmit}
                 property={editProperty}
                 onChange={handleChange}
+                validateForm={validateForm}
+                disabled={disabled}
             />
 
             <ConfirmDialog
