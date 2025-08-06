@@ -16,3 +16,9 @@ export const features = [
     { name: "WiFi", url: "https://demo09.houzez.co/feature/wifi/" },
     { name: "Window Coverings", url: "https://demo09.houzez.co/feature/window-coverings/" },
 ];
+
+export const featureOptions = [
+    "Air Conditioning", "Barbeque", "Dryer", "Gym", "Laundry", "Lawn",
+    "Microwave", "Outdoor Shower", "Refrigerator", "Sauna", "Security",
+    "Swimming Pool", "TV Cable", "Washer", "WiFi", "Window Coverings"
+];
