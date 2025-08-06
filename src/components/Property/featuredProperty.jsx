@@ -98,7 +98,7 @@ const FeaturedProperties = () => {
                             <div className="p-4">
                                 <h3 className="text-lg font-semibold mb-1 font-[Prata]">{property.title}</h3>
                                 <p className="text-emerald-700 font-bold text-md mb-3">
-                                    {property.price.toLocaleString()}
+                                    {property.price?.toLocaleString()}
                                 </p>
 
                                 <div className="flex justify-between text-sm text-gray-500 font-[Lato]">
