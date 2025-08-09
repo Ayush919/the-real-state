@@ -1,4 +1,4 @@
-
+// app/models/Property.js
 import mongoose from "mongoose";
 
 const propertySchema = new mongoose.Schema(
@@ -12,11 +12,10 @@ const propertySchema = new mongoose.Schema(
         images: [{type: String}],
         type: {type: String, enum: ["sale", "rent"], required: true},
         price: {type: Number},
-        features: [{ type: String }], // ✅ new field
+        retailPrice: {type: Number},
+        features: [{type: String}],
     },
     {timestamps: true}
 );
 
 export default mongoose.models.properties || mongoose.model("properties", propertySchema);
-
-
