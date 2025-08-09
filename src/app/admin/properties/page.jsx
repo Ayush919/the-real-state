@@ -1,4 +1,4 @@
-
+// app/admin/properties/page.tsx
 "use client";
 import {useEffect, useState} from "react";
 import {styled} from '@mui/material/styles';
@@ -14,7 +14,7 @@ import {
     TableRow,
     Typography,
 } from "@mui/material";
-import ConfirmDialog from "@/app/admin/properties/confirmDialog";
+import ConfirmDialog from "@/app/admin/properties/ConfirmDialog";
 import PropertyModal from "@/app/admin/properties/propertyModel";
 import Logout from "@/app/admin/logout/logout";
 import {useRouter} from "next/navigation";
@@ -50,7 +50,8 @@ export default function PropertiesPage() {
     const [page, setPage] = useState(0); // MUI starts pages at index 0
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [isAuthenticated, setIsAuthenticated] = useState(false)
-    const [disabled, setDisabled] = useState(true)
+    const [localFormValues, setLocalFormValues] = useState({features: []});
+    const [imageFiles, setImageFiles] = useState([]);
 
 
     useEffect(() => {
@@ -66,11 +67,11 @@ export default function PropertiesPage() {
     }, []);
 
     const handleSubmit = async (data) => {
-        console.log("handleSubmit : =: = :", editProperty,data)
+        console.log("handleSubmit : =: = :", editProperty, data)
         const method = data?._id ? "PUT" : "POST";
         const url = data?._id ? `/api/properties/${data._id}` : "/api/properties";
         const token = localStorage.getItem('token')
-
+        console.log("data :: ", data)
         const res = await fetch(url, {
             method, headers: {
                 'Content-Type': 'application/json',
@@ -86,17 +87,9 @@ export default function PropertiesPage() {
     const onClose = () => {
         setOpenModal(false);
         setEditProperty(null);
+        setImageFiles([])
+        setLocalFormValues({features: []})
     }
-
-    const handleChange = (e) => {
-        const {name, value} = e?.target;
-        console.log("handleChange : =: = :", name, value)
-        setEditProperty((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
-        validateForm()
-    };
 
     const fetchProperties = async () => {
         const res = await fetch("/api/properties");
@@ -104,22 +97,6 @@ export default function PropertiesPage() {
         localStorage.setItem("properties", data.data);
         setProperties(data.data);
     };
-
-    const handleEdit = (property) => {
-        setEditProperty(property);
-        setOpenModal(true);
-    };
-
-    const validateForm = () => {
-        if (!properties || properties?.title === "" || properties?.location === "" || properties?.rooms === "" ||
-            properties?.bathrooms === "" || properties?.type === "" || properties?.price === "" ||
-            properties?.images === "" || properties?.description === "") {
-            console.log("inside data : =: = :")
-            setDisabled(true)
-        } else {
-            setDisabled(false)
-        }
-    }
 
     const handleDelete = async (id) => {
         const token = localStorage.getItem('token')
@@ -149,7 +126,7 @@ export default function PropertiesPage() {
             <Table sx={{minWidth: 1200, border: '1px solid #ccc'}}>
                 <TableHead>
                     <StyledTableRow>
-                        {["Title", "Location", "Rooms", "Bathrooms", "Size (sq ft)", "Images", "Price", "Type", "Actions"].map((head) => (
+                        {["Title", "Location", "Rooms", "Bathrooms", "Size (sq ft)", "Images", "Price",  "Retail Price","Type", "Actions"].map((head) => (
                             <StyledTableCell key={head} sx={{border: '1px solid #ccc', fontWeight: 'bold'}}>
                                 {head}
                             </StyledTableCell>
@@ -191,6 +168,9 @@ export default function PropertiesPage() {
                                     </Box>
                                 </StyledTableCell>
                                 <StyledTableCell sx={{border: '1px solid #ccc'}}>{p.price}</StyledTableCell>
+                                <StyledTableCell sx={{border: '1px solid #ccc'}}>
+                                    {p.retailPrice ?? "-"}
+                                </StyledTableCell>
                                 <StyledTableCell sx={{border: '1px solid #ccc'}}>{p.type}</StyledTableCell>
                                 <TableCell sx={{border: '1px solid #ccc'}}>
                                     {/*<Button variant="contained" size="small" onClick={() => handleEdit(p)}>*/}
@@ -224,16 +204,13 @@ export default function PropertiesPage() {
 
             <PropertyModal
                 open={openModal}
-                onClose={() => {
-                    setOpenModal(false);
-                    setEditProperty(null);
-                    // fetchProperties();
-                }}
+                onClose={onClose}
                 onSubmit={handleSubmit}
                 property={editProperty}
-                onChange={handleChange}
-                validateForm={validateForm}
-                disabled={disabled}
+                localFormValues={localFormValues}
+                setLocalFormValues={setLocalFormValues}
+                imageFiles={imageFiles}
+                setImageFiles={setImageFiles}
             />
 
             <ConfirmDialog
