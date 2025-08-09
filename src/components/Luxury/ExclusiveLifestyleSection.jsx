@@ -32,7 +32,7 @@ export default function ExclusiveLifestyleSection() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                     {lifestyleData.map((item, index) => (
-                        <Link href={"#"} key={index}>
+                        <div key={index}>
                             <div
                                 className="relative h-80 md:h-96 w-full bg-cover bg-center rounded-xl overflow-hidden shadow hover:scale-[1.03] transition"
                                 style={{ backgroundImage: `url(${item.link})` }}
@@ -42,7 +42,7 @@ export default function ExclusiveLifestyleSection() {
                                     {/*<p className="text-sm">{item.properties} Properties</p>*/}
                                 </div>
                             </div>
-                        </Link>
+                        </div>
                     ))}
                 </div>
             </div>
