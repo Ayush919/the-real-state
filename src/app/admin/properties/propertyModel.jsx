@@ -42,7 +42,6 @@ export default function AddPropertyModal({
 
     const handleChange = (e) => {
         const {name, value, files} = e.target;
-        console.log("handleChange : ", name, value, files, localFormValues);
 
         if (name === "images") {
             const selectedFiles = Array.from(files);
@@ -81,7 +80,6 @@ export default function AddPropertyModal({
                 localFormValues[field] !== ""
         );
 
-        console.log("isFilled LL :: ", isFilled)
         const hasAssets = imageFiles.length > 0;
         setIsValid(isFilled && hasAssets);
     };
