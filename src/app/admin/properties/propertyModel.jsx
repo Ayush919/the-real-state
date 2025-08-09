@@ -24,12 +24,13 @@ export default function AddPropertyModal({
                                              onClose,
                                              onSubmit,
                                              formValues,
-                                             disabled,
+                                             localFormValues,
+                                             setLocalFormValues,
+    imageFiles,
+    setImageFiles
                                          }) {
-    const [localFormValues, setLocalFormValues] = useState({});
     const [isValid, setIsValid] = useState(false);
     const [uploading, setUploading] = useState(false);
-    const [imageFiles, setImageFiles] = useState([]);
 
     useEffect(() => {
         setLocalFormValues({...formValues, type: formValues?.type || "sale"});
@@ -41,10 +42,17 @@ export default function AddPropertyModal({
 
     const handleChange = (e) => {
         const {name, value, files} = e.target;
-        console.log("handleChange : =: = :", name, value, files);
+        console.log("handleChange : ", name, value, files, localFormValues);
+
         if (name === "images") {
             const selectedFiles = Array.from(files);
             setImageFiles(selectedFiles);
+        } else if (name === "features") {
+            // Ensure value is always an array
+            setLocalFormValues((prev) => ({
+                ...prev,
+                [name]: Array.isArray(value) ? value : [],
+            }));
         } else {
             setLocalFormValues((prev) => ({
                 ...prev,
@@ -52,6 +60,7 @@ export default function AddPropertyModal({
             }));
         }
     };
+
 
     const validateForm = () => {
         const requiredFields = [
@@ -72,6 +81,7 @@ export default function AddPropertyModal({
                 localFormValues[field] !== ""
         );
 
+        console.log("isFilled LL :: ", isFilled)
         const hasAssets = imageFiles.length > 0;
         setIsValid(isFilled && hasAssets);
     };
@@ -95,12 +105,11 @@ export default function AddPropertyModal({
                 images: uploadedImageUrls,
             };
 
-            console.log("finalFormData :: ", finalFormData)
             formValues = finalFormData; // Update formValues with the final data
             onSubmit(finalFormData);
             setUploading(false);
+            setLocalFormValues({features: []})
         } catch (error) {
-            console.error("Image upload failed:", error);
             setUploading(false);
         }
     };
@@ -206,7 +215,7 @@ export default function AddPropertyModal({
                                 labelId="features-label"
                                 multiple
                                 name="features"
-                                value={localFormValues.features || []} // ✅ bind to local state
+                                value={localFormValues.features || []}
                                 onChange={(e) =>
                                     setLocalFormValues((prev) => ({
                                         ...prev,
@@ -219,7 +228,7 @@ export default function AddPropertyModal({
                             >
                                 {featureOptions.map((feature) => (
                                     <MenuItem key={feature} value={feature}>
-                                        <Checkbox checked={localFormValues.features?.includes(feature)}/>
+                                        <Checkbox checked={(localFormValues.features || [])?.includes(feature)}/>
                                         <ListItemText primary={feature}/>
                                     </MenuItem>
                                 ))}
