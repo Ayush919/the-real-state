@@ -1,8 +1,7 @@
 import {notFound} from 'next/navigation';
 import PropertyHeader from "@/components/Property/PropertyHeader";
-import {features} from "@/utils/constants";
-import Link from "next/link";
 import FeaturedProperties from "@/components/Property/featuredProperty";
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 export default async function PropertyPage({params: {id}}) {
     const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/properties/?id=${id}`, {
@@ -11,7 +10,7 @@ export default async function PropertyPage({params: {id}}) {
     if (!res.ok) return notFound();
     const {data: property} = await res.json();
 
-
+    console.log("property :: ", property)
     return (
         <>
             {/* HEADER SECTION */}
@@ -95,10 +94,11 @@ export default async function PropertyPage({params: {id}}) {
                                 <h2 className="text-2xl font-bold">Features</h2>
                             </div>
                             <ul className="grid grid-cols-1 sm:grid-cols-4 gap-3 list-none text-gray-700">
-                                {features.map((feature, idx) => (
+                                {property.features.map((feature, idx) => (
                                     <li key={idx} className="flex items-center gap-2">
-                                        <i className="houzez-icon icon-check-circle-1 text-green-600"/>
-                                        <Link href={feature.url} className="hover:underline">{feature.name}</Link>
+                                        <CheckCircleIcon sx={{ color: 'grey' }} />
+
+                                        <div className="hover:underline">{feature}</div>
                                     </li>
                                 ))}
                             </ul>
@@ -107,7 +107,7 @@ export default async function PropertyPage({params: {id}}) {
                     </div>
                 </section>
             </section>
-            <FeaturedProperties/>
+            {/*<FeaturedProperties/>*/}
         </>
     );
 }
