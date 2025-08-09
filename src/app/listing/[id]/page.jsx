@@ -10,7 +10,6 @@ export default async function PropertyPage({params: {id}}) {
     if (!res.ok) return notFound();
     const {data: property} = await res.json();
 
-
     return (
         <>
             {/* HEADER SECTION */}
