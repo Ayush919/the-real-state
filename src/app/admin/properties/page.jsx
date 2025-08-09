@@ -67,11 +67,9 @@ export default function PropertiesPage() {
     }, []);
 
     const handleSubmit = async (data) => {
-        console.log("handleSubmit : =: = :", editProperty, data)
         const method = data?._id ? "PUT" : "POST";
         const url = data?._id ? `/api/properties/${data._id}` : "/api/properties";
         const token = localStorage.getItem('token')
-        console.log("data :: ", data)
         const res = await fetch(url, {
             method, headers: {
                 'Content-Type': 'application/json',
