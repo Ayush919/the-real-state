@@ -23,7 +23,6 @@ export async function GET(req) {
             return NextResponse.json({success: true, data: properties});
         }
     } catch (error) {
-        console.error("Error fetching property/properties:", error);
         return NextResponse.json({success: false, error: 'Failed to fetch properties'}, {status: 500});
     }
 }
@@ -38,14 +37,13 @@ export async function POST(req) {
         const token = authHeader?.split(' ')[1]
 
         if (!token) {
-            return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
+            return NextResponse.json({message: 'Unauthorized'}, {status: 401})
         }
 
 
         const newProperty = await Property.create(body);
         return NextResponse.json({success: true, data: newProperty}, {status: 201});
     } catch (error) {
-        console.error("Error creating property:", error);
         return NextResponse.json({success: false, error: 'Failed to create property'}, {status: 500});
     }
 }
@@ -58,7 +56,7 @@ export async function PUT(req) {
     const token = authHeader?.split(' ')[1]
 
     if (!token) {
-        return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
+        return NextResponse.json({message: 'Unauthorized'}, {status: 401})
     }
 
     if (!id) {
@@ -74,4 +72,3 @@ export async function PUT(req) {
         return NextResponse.json({success: false, error: 'Failed to update property'}, {status: 500});
     }
 }
-
