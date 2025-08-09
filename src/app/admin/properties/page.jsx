@@ -112,7 +112,7 @@ export default function PropertiesPage() {
     if (!isAuthenticated) return null
 
     return (
-        <Box sx={{overflowX: 'auto'}} p={4}>
+        <Box p={4}>
             <Logout/>
             <Box display="flex" justifyContent="space-between" alignItems="center" mb={4} mt={5}>
                 <Typography variant="h4">Properties List</Typography>
@@ -121,72 +121,91 @@ export default function PropertiesPage() {
                 </Button>
             </Box>
 
-            <Table sx={{minWidth: 1200, border: '1px solid #ccc'}}>
-                <TableHead>
-                    <StyledTableRow>
-                        {["Title", "Location", "Rooms", "Bathrooms", "Size (sq ft)", "Images", "Price",  "Retail Price","Type", "Actions"].map((head) => (
-                            <StyledTableCell key={head} sx={{border: '1px solid #ccc', fontWeight: 'bold'}}>
-                                {head}
-                            </StyledTableCell>
-                        ))}
-                    </StyledTableRow>
-                </TableHead>
+            {/* Scroll only the table horizontally */}
+            <Box sx={{ overflowX: 'auto' }}>
+                <Table sx={{ minWidth: 1200, border: '1px solid #ccc' }}>
+                    <TableHead>
+                        <StyledTableRow>
+                            {[
+                                "Title",
+                                "Location",
+                                "Rooms",
+                                "Bathrooms",
+                                "Size (sq ft)",
+                                "Images",
+                                "Price",
+                                "Retail Price",
+                                "Type",
+                                "Actions"
+                            ].map((head) => (
+                                <StyledTableCell
+                                    key={head}
+                                    sx={{ border: '1px solid #ccc', fontWeight: 'bold' }}
+                                >
+                                    {head}
+                                </StyledTableCell>
+                            ))}
+                        </StyledTableRow>
+                    </TableHead>
 
-                <TableBody>
-                    {properties?.length === 0 ? (
-                        <TableRow>
-                            <TableCell colSpan={8} align="center" sx={{border: '1px solid #ccc'}}>
-                                No properties found.
-                            </TableCell>
-                        </TableRow>
-                    ) : (
-                        properties.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((p) => (
-                            <StyledTableRow key={p._id}>
-                                <StyledTableCell sx={{border: '1px solid #ccc'}}>{p.title}</StyledTableCell>
-                                <StyledTableCell sx={{border: '1px solid #ccc'}}>{p.location}</StyledTableCell>
-                                <StyledTableCell sx={{border: '1px solid #ccc'}}>{p.rooms}</StyledTableCell>
-                                <StyledTableCell sx={{border: '1px solid #ccc'}}>{p.bathrooms}</StyledTableCell>
-                                <StyledTableCell sx={{border: '1px solid #ccc'}}>{p.size}</StyledTableCell>
-                                <StyledTableCell sx={{border: '1px solid #ccc'}}>
-                                    <Box display="grid" gridTemplateColumns="repeat(2, 1fr)" gap={1}>
-                                        {(p.images || []).slice(0, 6).map((url, i) => (
-                                            <Box
-                                                key={i}
-                                                component="img"
-                                                src={url}
-                                                alt={`img-${i}`}
-                                                sx={{
-                                                    width: '100%',
-                                                    height: 60,
-                                                    objectFit: 'cover',
-                                                    borderRadius: 1,
-                                                }}
-                                            />
-                                        ))}
-                                    </Box>
-                                </StyledTableCell>
-                                <StyledTableCell sx={{border: '1px solid #ccc'}}>{p.price}</StyledTableCell>
-                                <StyledTableCell sx={{border: '1px solid #ccc'}}>
-                                    {p.retailPrice ?? "-"}
-                                </StyledTableCell>
-                                <StyledTableCell sx={{border: '1px solid #ccc'}}>{p.type}</StyledTableCell>
-                                <TableCell sx={{border: '1px solid #ccc'}}>
-                                    {/*<Button variant="contained" size="small" onClick={() => handleEdit(p)}>*/}
-                                    {/*    Edit*/}
-                                    {/*</Button>*/}
-                                    <Button variant="contained" size="small" color="error"
-                                            sx={{ml: 2}} // ml = margin-left
-                                            onClick={(e) => {
-                                                setConfirmDelete(p._id)
-                                            }}>
-                                        Delete
-                                    </Button>
+                    <TableBody>
+                        {properties?.length === 0 ? (
+                            <TableRow>
+                                <TableCell colSpan={10} align="center" sx={{ border: '1px solid #ccc' }}>
+                                    No properties found.
                                 </TableCell>
-                            </StyledTableRow>
-                        ))
-                    )}
-                </TableBody>
-            </Table>
+                            </TableRow>
+                        ) : (
+                            properties
+                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .map((p) => (
+                                    <StyledTableRow key={p._id}>
+                                        <StyledTableCell sx={{ border: '1px solid #ccc' }}>{p.title}</StyledTableCell>
+                                        <StyledTableCell sx={{ border: '1px solid #ccc' }}>{p.location}</StyledTableCell>
+                                        <StyledTableCell sx={{ border: '1px solid #ccc' }}>{p.rooms}</StyledTableCell>
+                                        <StyledTableCell sx={{ border: '1px solid #ccc' }}>{p.bathrooms}</StyledTableCell>
+                                        <StyledTableCell sx={{ border: '1px solid #ccc' }}>{p.size}</StyledTableCell>
+                                        <StyledTableCell sx={{ border: '1px solid #ccc' }}>
+                                            <Box display="grid" gridTemplateColumns="repeat(2, 1fr)" gap={1}>
+                                                {(p.images || []).slice(0, 6).map((url, i) => (
+                                                    <Box
+                                                        key={i}
+                                                        component="img"
+                                                        src={url}
+                                                        alt={`img-${i}`}
+                                                        sx={{
+                                                            width: '100%',
+                                                            height: 60,
+                                                            objectFit: 'cover',
+                                                            borderRadius: 1,
+                                                        }}
+                                                    />
+                                                ))}
+                                            </Box>
+                                        </StyledTableCell>
+                                        <StyledTableCell sx={{ border: '1px solid #ccc' }}>{p.price}</StyledTableCell>
+                                        <StyledTableCell sx={{ border: '1px solid #ccc' }}>
+                                            {p.retailPrice ?? "-"}
+                                        </StyledTableCell>
+                                        <StyledTableCell sx={{ border: '1px solid #ccc' }}>{p.type}</StyledTableCell>
+                                        <TableCell sx={{ border: '1px solid #ccc' }}>
+                                            <Button
+                                                variant="contained"
+                                                size="small"
+                                                color="error"
+                                                sx={{ ml: 2 }}
+                                                onClick={() => setConfirmDelete(p._id)}
+                                            >
+                                                Delete
+                                            </Button>
+                                        </TableCell>
+                                    </StyledTableRow>
+                                ))
+                        )}
+                    </TableBody>
+                </Table>
+            </Box>
+
             <TablePagination
                 component="div"
                 count={properties.length}
@@ -195,7 +214,7 @@ export default function PropertiesPage() {
                 rowsPerPage={rowsPerPage}
                 onRowsPerPageChange={(event) => {
                     setRowsPerPage(parseInt(event.target.value, 10));
-                    setPage(0); // reset to first page
+                    setPage(0);
                 }}
                 rowsPerPageOptions={[5, 10, 20, 50]}
             />
@@ -218,5 +237,6 @@ export default function PropertiesPage() {
                 message="Are you sure you want to delete this property?"
             />
         </Box>
+
     );
 }
