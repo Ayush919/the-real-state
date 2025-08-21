@@ -8,8 +8,8 @@ export default function Footer() {
                 <div>
                     <h3 className="text-lg font-semibold mb-4">About Site</h3>
                     <p className="text-sm text-gray-700 leading-relaxed">
-                        Houzez is a premium WordPress theme for real estate where modern
-                        aesthetics are combined with tasteful simplicity.
+                        EZ Grow Infra, with 5 years of trusted experience in real estate, specializes in residential, commercial, and industrial properties.
+                        We prioritize transparency, integrity, and customer satisfaction to make your property journey smooth and hassle-free.
                     </p>
                 </div>
 
@@ -17,23 +17,23 @@ export default function Footer() {
                 <div>
                     <h3 className="text-lg font-semibold mb-4">Contact Us</h3>
                     <ul className="text-sm text-gray-700 space-y-2">
-                        <li>📍 774 NE 84th St Miami, FL 33879</li>
+                        <li>📍 Bay Shop 18, Ground floor, <br/>
+                            Motia Guildford Square, Airport Road, Zirakpur</li>
                         <li>
                             📧{" "}
                             <a
                                 href="mailto:email@email.com"
                                 className="text-[#5B8B8B] hover:underline"
                             >
-                                email@email.com
+                                ezgrowinfra@gmail.com
                             </a>
                         </li>
                         <li>
-                            <Link
-                                href="http://localhost:3000/contact"
+                            <div
                                 className="text-[#5B8B8B] hover:underline"
                             >
-                                Contact us
-                            </Link>
+                                Contact us - 79885 00047, 96468 33095
+                            </div>
                         </li>
                     </ul>
                 </div>
@@ -43,11 +43,9 @@ export default function Footer() {
                     <h3 className="text-lg font-semibold mb-4">Follow Us</h3>
                     <div className="flex flex-wrap gap-4">
                         {[
-                            { label: "Facebook", href: "https://facebook.com/Favethemes" },
-                            { label: "Twitter", href: "https://twitter.com/favethemes" },
-                            { label: "Instagram", href: "https://instagram.com" },
-                            { label: "Linkedin", href: "https://linkedin.com" },
-                            { label: "Youtube", href: "#" },
+                            { label: "Facebook", href: "https://www.facebook.com/share/1HqCDwgf3X/?mibextid=wwXIfr" },
+                            { label: "Instagram", href: "https://www.instagram.com/ezgrowinfra?igsh=MXM1NXJoYmRidW80dw%3D%3D&utm_source=qr" },
+                            { label: "Map", href: "https://maps.app.goo.gl/4YgtmSa2ZTv6VPbq7?g_st=ipc" },
                         ].map((social, idx) => (
                             <a
                                 key={idx}
