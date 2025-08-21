@@ -2,8 +2,8 @@ import './globals.css'
 import LayoutShell from '@/components/LayoutShell'
 
 export const metadata = {
-    title: 'My Website',
-    description: 'A responsive site using Next.js App Router',
+    title: 'Ez Grow Infra',
+    description: 'Specialize in High‑End Standard Levels',
 }
 
 export default function RootLayout({ children }) {
