@@ -17,7 +17,7 @@ export default function AboutPage() {
                 />
                 <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-white text-center z-10 px-4">
                     <h1 className="text-4xl font-bold">About Us</h1>
-                    <p className="text-xl mt-2 uppercase">Specialize in High‑End Standard Levels</p>
+                    <p className="text-xl mt-2 uppercase">Your Property Journey, Made Simple.</p>
                 </div>
             </section>
 
@@ -26,7 +26,7 @@ export default function AboutPage() {
                 <p>
                     Welcome to EZ Grow Infra, a trusted name in the Real Estate industry. Whether you're a first-time buyer or an experienced investor,
                     EZ Grow Infra is your partner in achieving your real estate goals. With 5 years of experience, we've established ourselves as a reliable partner for all your property needs.
-                    We are here with a mission to provide exceptional services, exceeding client expectations and fostering long-term relationships. At EZ Grow Infra, we specialize in residential, 
+                    We are here with a mission to provide exceptional services, exceeding client expectations and fostering long-term relationships. At EZ Grow Infra, we specialize in residential,
                     commercial, and industrial properties. We ensure seamless transactions, from property search to possession. We prioritize transparency and integrity.
                     Also, customer satisfaction is our primary concern. We've earned a reputation for delivering high-quality services and building trust with our clients.
                     Our goal is to make your property journey smooth and hassle-free. Let us help you grow with EZ Grow Infra. Contact us today to explore your property options!
@@ -96,13 +96,13 @@ export default function AboutPage() {
             {/* Value Section */}
             <section className="flex flex-col md:flex-row-reverse items-center justify-center gap-8 max-w-6xl mx-auto px-4">
                 {/*<div className="w-full md:w-1/2">*/}
-                    <Image
-                        src="https://demo09.houzez.co/wp-content/uploads/2019/03/Screen-Shot-2019-03-12-at-4.00.40-PM.png"
-                        alt="Value"
-                        width={400}
-                        height={250}
-                        className="rounded-xl"
-                    />
+                <Image
+                    src="https://demo09.houzez.co/wp-content/uploads/2019/03/Screen-Shot-2019-03-12-at-4.00.40-PM.png"
+                    alt="Value"
+                    width={400}
+                    height={250}
+                    className="rounded-xl"
+                />
                 {/*</div>*/}
                 <div className="w-full md:w-1/2 space-y-4">
                     <h2 className="text-3xl font-semibold">Value</h2>
