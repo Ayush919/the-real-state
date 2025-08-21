@@ -25,7 +25,7 @@ export default function ContactForm() {
                 formBody.append(key, value);
             });
 
-            const res = await fetch("https://formsubmit.co/ajax/${process.env.EMAIL_ID}", {
+            const res = await fetch(`https://formsubmit.co/ajax/${process.env.EMAIL_ID}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded",
@@ -118,22 +118,37 @@ export default function ContactForm() {
                 <div className="md:col-span-5 bg-[#eef2f2] p-10 rounded-xl shadow-md border border-gray-200">
                     <h2 className="text-4xl font-serif font-semibold mb-6">Headquarters</h2>
                     <p className="text-lg mb-6">
-                        1584 Biscayne Boulevard<br />
-                        Miami FL, 33176
+                        Bay Shop 18, Ground floor, Motia Guildford Square<br/>
+                        Airport Road, Zirakpur
                     </p>
 
                     <div className="mb-6">
-                        <p className="text-lg font-semibold">Amy Miller</p>
-                        <p className="text-base">Public Relations Manager</p>
-                        <p className="text-base">774 NE 84th St Miami, FL 33879</p>
-                        <p className="text-base">amy.miller@houzez.com</p>
+                        <p className="text-lg font-semibold">Mr. Deepak Sethi</p>
+                        <p className="text-base">79885 00047</p>
                     </div>
 
                     <div>
-                        <p className="text-lg font-semibold">Kyle Parker</p>
-                        <p className="text-base">Public Relations Associate</p>
-                        <p className="text-base">774 NE 84th St Miami, FL 33879</p>
-                        <p className="text-base">kyle.parker@houzez.com</p>
+                        <p className="text-lg font-semibold">Mr. Jatin Dua</p>
+                        <p className="text-base">96468 33095</p>
+                    </div>
+                    <div className="mt-6">
+                        <a
+                            href="https://maps.app.goo.gl/4YgtmSa2ZTv6VPbq7?g_st=ipc"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="block"
+                        >
+                            <iframe
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3430.149574234781!2d76.83335797519752!3d30.644047474614568!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390febf78f68f557%3A0x3e05e44c7b42e14f!2sMotia%20Guildford%20Square%2C%20Zirakpur!5e0!3m2!1sen!2sin!4v1724259255123!5m2!1sen!2sin"
+                                width="100%"
+                                height="300"
+                                style={{border: 0, pointerEvents: "none"}}
+                                allowFullScreen=""
+                                loading="lazy"
+                                referrerPolicy="no-referrer-when-downgrade"
+                                className="rounded-lg shadow"
+                            ></iframe>
+                        </a>
                     </div>
                 </div>
             </div>
