@@ -24,12 +24,12 @@ export default function AboutPage() {
             {/* Description */}
             <section className="max-w-3xl mx-auto px-4 text-center text-gray-700 text-lg leading-relaxed">
                 <p>
-                    Luxury real estate is the real estate market niche targeted to high‑net‑worth
-                    individuals. These individuals tend to own multiple homes in numerous locations
-                    across the world. The characteristics that define luxury real estate differ
-                    among countries. However, the location largely defines the property’s value,
-                    especially with respect to whether it offers views or amenities such as proximity
-                    to golf courses, school districts, and the downtown district.
+                    Welcome to EZ Grow Infra, a trusted name in the Real Estate industry. Whether you're a first-time buyer or an experienced investor,
+                    EZ Grow Infra is your partner in achieving your real estate goals. With 5 years of experience, we've established ourselves as a reliable partner for all your property needs.
+                    We are here with a mission to provide exceptional services, exceeding client expectations and fostering long-term relationships. At EZ Grow Infra, we specialize in residential, 
+                    commercial, and industrial properties. We ensure seamless transactions, from property search to possession. We prioritize transparency and integrity.
+                    Also, customer satisfaction is our primary concern. We've earned a reputation for delivering high-quality services and building trust with our clients.
+                    Our goal is to make your property journey smooth and hassle-free. Let us help you grow with EZ Grow Infra. Contact us today to explore your property options!
                 </p>
             </section>
 
