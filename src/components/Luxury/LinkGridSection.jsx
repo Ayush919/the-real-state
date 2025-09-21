@@ -11,7 +11,7 @@ const LinkGridSection = () => {
                 <a
                     key={index}
                     href={link.href}
-                    className="text-[#5B8B8B] hover:underline text-lg font-medium font-[lato]"
+                    className="text-[#5B8B8B] hover:underline text-lg font-medium font-[Prata]"
                 >
                     {link.label}
                 </a>
