@@ -61,7 +61,7 @@ const FeaturedProperties = () => {
                     {currentPath === "/listing" ? "All Available Properties" : "Featured Luxury Property"}
                 </h2>
                 {currentPath !== "/listing" && (
-                    <p className="text-gray-500 font-[lato]">
+                    <p className="text-gray-500 font-[Prata]">
                         Create property listings with all the features you’d expect
                     </p>
                 )}
