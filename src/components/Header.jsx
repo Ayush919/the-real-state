@@ -3,6 +3,8 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
+import Image from "next/image";
+import logo from "../../public/logo.png"
 
 const Header = () => {
     const [isOpen, setIsOpen] = useState(false)
@@ -25,7 +27,15 @@ const Header = () => {
             <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
                 {/* Logo */}
                 <Link href="/" className="text-white text-2xl font-bold tracking-wide flex items-center gap-2 font-[Prata]">
-                    <span>houzez</span>
+                    <Image
+                        src={logo} // Use actual image path from /public
+                        alt="Contact"
+                        // fill
+                        className="object-cover object-center"
+                        width={70}
+                        height={70}
+                        priority
+                    />
                 </Link>
 
                 {/* Desktop Menu */}
