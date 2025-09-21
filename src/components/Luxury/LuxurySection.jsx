@@ -12,7 +12,7 @@ export default function LuxurySection() {
             <div className="max-w-5xl mx-auto text-center">
                 <HeadingSection />
                 <ParagraphSection  />
-                <LinkGridSection />
+{/*                 <LinkGridSection /> */}
                 <ExclusiveLifestyleSection/>
                 <MarketValueSection/>
                 <PropertyValuationForm/>
