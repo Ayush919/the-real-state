@@ -32,7 +32,7 @@ export default function Footer() {
                             <div
                                 className="text-[#5B8B8B] hover:underline"
                             >
-                                Contact us - 79885 00047, 96468 33095
+                                <span role="img" aria-label="call">📞</span> 79885 00047, 96468 33095
                             </div>
                         </li>
                     </ul>
