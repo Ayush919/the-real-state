@@ -166,7 +166,7 @@ const FeaturedProperties = () => {
                                         )}
                                     </p>
 
-                                    <div className="flex justify-between text-sm text-gray-500 font-[Lato]">
+                                    <div className="flex justify-between text-sm text-gray-500 font-[Prata]">
                                         <span className="flex items-center gap-1">
                                             <FaBed /> {property.rooms}
                                         </span>
