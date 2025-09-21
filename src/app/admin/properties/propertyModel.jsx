@@ -26,8 +26,8 @@ export default function AddPropertyModal({
                                              formValues,
                                              localFormValues,
                                              setLocalFormValues,
-    imageFiles,
-    setImageFiles
+                                             imageFiles,
+                                             setImageFiles
                                          }) {
     const [isValid, setIsValid] = useState(false);
     const [uploading, setUploading] = useState(false);
@@ -38,6 +38,7 @@ export default function AddPropertyModal({
 
     useEffect(() => {
         validateForm();
+        console.log("isValid :: ", isValid, localFormValues)
     }, [localFormValues]);
 
     const handleChange = (e) => {
@@ -70,7 +71,7 @@ export default function AddPropertyModal({
             "size",
             "type",
             "price",
-            "retailPrice",
+            // "retailPrice",
             "description",
         ];
         const isFilled = requiredFields.every(
@@ -79,6 +80,7 @@ export default function AddPropertyModal({
                 localFormValues[field] !== null &&
                 localFormValues[field] !== ""
         );
+        console.log("isFilled :: ", isFilled)
 
         const hasAssets = imageFiles.length > 0;
         setIsValid(isFilled && hasAssets);
@@ -199,11 +201,11 @@ export default function AddPropertyModal({
                         <TextField
                             label="Retail Price"
                             name="retailPrice"
-                            value={localFormValues.retailPrice || ""}
+                            value={localFormValues?.retailPrice || ""}
                             onChange={handleChange}
                             type="number"
                             fullWidth
-                            required
+                            // required
                         />
                     </Grid>
                     <Grid size={6} item xs={12} sm={6}>
