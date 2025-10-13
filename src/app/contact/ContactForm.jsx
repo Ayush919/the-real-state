@@ -24,6 +24,7 @@ export default function ContactForm() {
             Object.entries(formData).forEach(([key, value]) => {
                 formBody.append(key, value);
             });
+            console.log("NEXT_PUBLIC_EMAIL_ID :: ",process.env.NEXT_PUBLIC_EMAIL_ID)
 
             const res = await fetch(`https://formsubmit.co/ajax/${process.env.NEXT_PUBLIC_EMAIL_ID}`, {
                 method: "POST",
