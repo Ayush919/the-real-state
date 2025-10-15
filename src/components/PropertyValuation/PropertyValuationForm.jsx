@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import {toast} from "react-toastify";
-// import { toast } from "react-hot-toast";
 
 export default function PropertyValuationForm() {
     const [formData, setFormData] = useState({
@@ -34,7 +33,7 @@ export default function PropertyValuationForm() {
                 formBody.append(key, value);
             });
 
-            const res = await fetch("https://formsubmit.co/ajax/${process.env.EMAIL_ID}", {
+            const res = await fetch(`https://formsubmit.co/ajax/${process.env.EMAIL_ID}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded",
@@ -182,7 +181,7 @@ export default function PropertyValuationForm() {
             <button
                 type="submit"
                 disabled={isLoading}
-                className={`w-full mt-6 bg-[#5B8B8B] text-white font-medium py-3 rounded-md hover:opacity-90 flex justify-center items-center ${isLoading ? "opacity-70 cursor-not-allowed" : ""}`}
+                className={`w-full mt-6 bg-[#5B8B8B] text-white font-medium py-3 rounded-md hover:opacity-90 flex justify-center items-center ${isLoading ? "opacity-70 cursor-not-allowed" : "cursor-pointer"}`}
             >
                 {isLoading ? (
                     <svg
