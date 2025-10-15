@@ -26,7 +26,7 @@ export default function AboutPage() {
 
             {/* Description */}
             <section className="w-full flex justify-center">
-                <div className="w-full max-w-7xl md:w-4/5 text-center text-gray-700 text-lg leading-relaxed">
+                <div className="w-full max-w-7xl md:w-4/5 leading-relaxed text-gray-700 text-lg">
                     <p>
                         Welcome to EZ Grow Infra, a trusted name in the Real Estate industry. Whether you're a
                         first-time buyer or an experienced investor,
