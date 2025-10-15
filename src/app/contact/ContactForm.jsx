@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import {useState} from "react";
 import {toast} from "react-toastify";
 
 export default function ContactForm() {
@@ -8,25 +8,26 @@ export default function ContactForm() {
         firstName: "",
         lastName: "",
         email: "",
+        phone: "",
         message: "",
     });
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
+        const {name, value} = e.target;
+        setFormData((prev) => ({...prev, [name]: value}));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+        setIsLoading(true);
         try {
             const formBody = new URLSearchParams();
             Object.entries(formData).forEach(([key, value]) => {
                 formBody.append(key, value);
             });
-            console.log("NEXT_PUBLIC_EMAIL_ID :: ",process.env.NEXT_PUBLIC_EMAIL_ID)
 
-            const res = await fetch(`https://formsubmit.co/ajax/${process.env.NEXT_PUBLIC_EMAIL_ID}`, {
+            const res = await fetch(`https://formsubmit.co/ajax/${process.env.EMAIL_ID}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded",
@@ -41,6 +42,7 @@ export default function ContactForm() {
                     lastName: "",
                     email: "",
                     message: "",
+                    phone: "",
                 });
             } else {
                 toast.error("Failed to send message. Please try again!");
@@ -48,6 +50,8 @@ export default function ContactForm() {
         } catch (error) {
             console.error(error);
             toast.error("An unexpected error occurred.");
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -83,17 +87,31 @@ export default function ContactForm() {
                                 />
                             </div>
                         </div>
-                        <div>
-                            <label className="block text-sm font-semibold mb-1">Email</label>
-                            <input
-                                type="email"
-                                name="email"
-                                className="w-full p-3 border border-gray-300 rounded-md"
-                                placeholder="Enter Email"
-                                value={formData.email}
-                                onChange={handleChange}
-                                required
-                            />
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label className="block text-sm font-semibold mb-1">Email</label>
+                                <input
+                                    type="email"
+                                    name="email"
+                                    className="w-full p-3 border border-gray-300 rounded-md"
+                                    placeholder="Enter Email"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-semibold mb-1">Phone Number</label>
+                                <input
+                                    type="tel"
+                                    name="phone"
+                                    className="w-full p-3 border border-gray-300 rounded-md"
+                                    placeholder="Phone number"
+                                    value={formData.phone}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
                         </div>
                         <div>
                             <label className="block text-sm font-semibold mb-1">Message</label>
@@ -109,9 +127,32 @@ export default function ContactForm() {
                         </div>
                         <button
                             type="submit"
-                            className="w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 rounded-md"
+                            disabled={isLoading}
+                            className={`w-full mt-6 bg-[#5B8B8B] text-white font-medium py-3 rounded-md hover:opacity-90 flex justify-center items-center ${isLoading ? "opacity-70 cursor-not-allowed" : "cursor-pointer"} `}
                         >
-                            Submit
+                            {isLoading ? (
+                                <svg
+                                    className="animate-spin h-5 w-5 mr-2 text-white"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <circle
+                                        className="opacity-25"
+                                        cx="12"
+                                        cy="12"
+                                        r="10"
+                                        stroke="currentColor"
+                                        strokeWidth="4"
+                                    ></circle>
+                                    <path
+                                        className="opacity-75"
+                                        fill="currentColor"
+                                        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                                    ></path>
+                                </svg>
+                            ) : null}
+                            {isLoading ? "Submitting..." : "Submit"}
                         </button>
                     </form>
                 </div>
