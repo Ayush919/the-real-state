@@ -4,7 +4,7 @@ import Link from 'next/link'
 
 export default function AboutPage() {
     return (
-        <main className="space-y-20">
+        <main className="space-y-20 mt-18">
 
             {/* Hero Section */}
             <section className="relative h-[400px]">
