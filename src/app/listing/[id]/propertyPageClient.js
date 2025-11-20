@@ -51,15 +51,46 @@ export default function PropertyPageClient({ property }) {
             </span>
                     )}
                 </div>
+                {/* SUPER AREA & CARPET AREA */}
+                {(property.superArea || property.carpetArea) && (
+                    <section className="w-full flex flex-col items-center mt-6">
+                        <h2 className="text-2xl font-bold mb-3 text-center">Area Details</h2>
+
+                        <div className="w-full max-w-3xl bg-gray-50 rounded-lg shadow p-6 border px-8">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 text-gray-700 text-lg font-[Prata]">
+
+                                {property.superArea && (
+                                    <div className="flex items-center gap-3">
+                                        🏢
+                                        <span className="font-semibold">Super Area:</span>
+                                        <span>{property.superArea} Sq Ft</span>
+                                    </div>
+                                )}
+
+                                {property.carpetArea && (
+                                    <div className="flex items-center gap-3">
+                                        🪟
+                                        <span className="font-semibold">Carpet Area:</span>
+                                        <span>{property.carpetArea} Sq Ft</span>
+                                    </div>
+                                )}
+
+                            </div>
+                        </div>
+                    </section>
+                )}
+
+
 
                 {/* DESCRIPTION */}
-                <section className="w-full flex flex-col items-center">
+                <section className="w-full flex flex-col items-center my-8">
                     <h2 className="text-2xl font-bold mb-4 text-center">Description</h2>
 
                     <p className="text-gray-700 text-lg leading-relaxed text-justify w-full max-w-4xl md:w-4/5">
                         {property.description}
                     </p>
                 </section>
+
 
                 {/* DETAILS, FEATURES, ETC... */}
 
