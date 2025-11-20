@@ -1,5 +1,5 @@
 // app/property/[id]/page.js
-import PropertyPageClient from "./PropertyPageClient";
+import PropertyPageClient from "./propertyPageClient";
 import { notFound } from "next/navigation";
 
 export default async function PropertyPage({ params: { id } }) {
