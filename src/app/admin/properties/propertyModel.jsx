@@ -33,12 +33,22 @@ export default function AddPropertyModal({
     const [uploading, setUploading] = useState(false);
 
     useEffect(() => {
-        setLocalFormValues({...formValues, type: formValues?.type || "sale"});
-    }, [formValues]);
+        if (!open) return; // only run when modal opens
+
+        if (formValues?._id) {
+            // Editing
+            setLocalFormValues(formValues);
+            setImageFiles([]);
+        } else {
+            // Adding new property
+            setLocalFormValues({ type: "sale", features: [] });
+            setImageFiles([]);
+        }
+    }, [open]);
+
 
     useEffect(() => {
         validateForm();
-        console.log("isValid :: ", isValid, localFormValues)
     }, [localFormValues]);
 
     const handleChange = (e) => {
@@ -71,19 +81,23 @@ export default function AddPropertyModal({
             "size",
             "type",
             "price",
-            // "retailPrice",
+            "superArea",
             "description",
         ];
+
         const isFilled = requiredFields.every(
             (field) =>
                 localFormValues[field] !== undefined &&
                 localFormValues[field] !== null &&
                 localFormValues[field] !== ""
         );
-        console.log("isFilled :: ", isFilled)
 
-        const hasAssets = imageFiles.length > 0;
-        setIsValid(isFilled && hasAssets);
+        // If editing → images not required
+        if (formValues?._id) {
+            setIsValid(isFilled);
+        } else {
+            setIsValid(isFilled && imageFiles.length > 0);
+        }
     };
 
     const uploadToUploadcare = async () => {
@@ -98,21 +112,35 @@ export default function AddPropertyModal({
     const handleSubmit = async () => {
         try {
             setUploading(true);
-            const uploadedImageUrls = await uploadToUploadcare();
+
+            let finalImageUrls = [...(formValues?.images || [])];
+
+            // If user uploaded new images → upload & replace URLs
+            if (imageFiles.length > 0) {
+                finalImageUrls = await uploadToUploadcare();
+            }
 
             const finalFormData = {
                 ...localFormValues,
-                images: uploadedImageUrls,
+                images: finalImageUrls,
             };
 
-            formValues = finalFormData; // Update formValues with the final data
             onSubmit(finalFormData);
+
             setUploading(false);
-            setLocalFormValues({features: []})
+            onClose();
+
+            setTimeout(() => {
+                setImageFiles([]);
+                setLocalFormValues({});
+            }, 200);
+
         } catch (error) {
+            console.error(error);
             setUploading(false);
         }
     };
+
 
     return (
         <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
@@ -199,13 +227,35 @@ export default function AddPropertyModal({
                     </Grid>
                     <Grid size={6} item xs={6}>
                         <TextField
-                            label="Retail Price"
+                            label="Retail Price (Optional)"
                             name="retailPrice"
                             value={localFormValues?.retailPrice || ""}
                             onChange={handleChange}
                             type="number"
                             fullWidth
                             // required
+                        />
+                    </Grid>
+                    <Grid size={6} item xs={6}>
+                        <TextField
+                            label="Super Area (sq ft)"
+                            name="superArea"
+                            value={localFormValues.superArea || ""}
+                            onChange={handleChange}
+                            type="number"
+                            fullWidth
+                            required
+                        />
+                    </Grid>
+
+                    <Grid size={6} item xs={6}>
+                        <TextField
+                            label="Carpet Area (sq ft) (Optional)"
+                            name="carpetArea"
+                            value={localFormValues.carpetArea || ""}
+                            onChange={handleChange}
+                            type="number"
+                            fullWidth
                         />
                     </Grid>
                     <Grid size={6} item xs={12} sm={6}>
@@ -303,4 +353,3 @@ export default function AddPropertyModal({
         </Dialog>
     );
 }
-
