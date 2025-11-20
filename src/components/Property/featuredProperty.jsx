@@ -177,6 +177,22 @@ const FeaturedProperties = () => {
                                             <FaRulerCombined /> {property.size} Sq Ft
                                         </span>
                                     </div>
+                                    {/* Carpet & Super Area — show only if available */}
+                                    {(property.superArea || property.carpetArea) && (
+                                        <div className="flex justify-between text-sm text-gray-600 font-[Prata] mt-3 border-t pt-2">
+                                            {property.superArea && (
+                                                <span className="flex items-center gap-1">
+                🏢 Super Area: {property.superArea} Sq Ft
+            </span>
+                                            )}
+                                            {property.carpetArea && (
+                                                <span className="flex items-center gap-1">
+                🪟 Carpet Area: {property.carpetArea} Sq Ft
+            </span>
+                                            )}
+                                        </div>
+                                    )}
+
                                 </div>
                             </div>
                         );
