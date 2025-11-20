@@ -70,14 +70,18 @@ export default function PropertiesPage() {
         const method = data?._id ? "PUT" : "POST";
         const url = data?._id ? `/api/properties/${data._id}` : "/api/properties";
         const token = localStorage.getItem('token')
-        const res = await fetch(url, {
-            method, headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
-            },
-            body: JSON.stringify(data),
-        });
-
+        console.log("data :: ", data);
+        try {
+            const res = await fetch(url, {
+                method, headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+                body: JSON.stringify(data),
+            });
+        } catch (err) {
+            console.error("Error in submitting property:", err);
+        }
         onClose(); // close modal & refresh list in parent
         fetchProperties().then();
     };
@@ -122,8 +126,8 @@ export default function PropertiesPage() {
             </Box>
 
             {/* Scroll only the table horizontally */}
-            <Box sx={{ overflowX: 'auto' }}>
-                <Table sx={{ minWidth: 1200, border: '1px solid #ccc' }}>
+            <Box sx={{overflowX: 'auto'}}>
+                <Table sx={{minWidth: 1200, border: '1px solid #ccc'}}>
                     <TableHead>
                         <StyledTableRow>
                             {[
@@ -132,6 +136,8 @@ export default function PropertiesPage() {
                                 "Rooms",
                                 "Bathrooms",
                                 "Size (sq ft)",
+                                "Super Area",
+                                "Carpet Area",
                                 "Images",
                                 "Price",
                                 "Retail Price",
@@ -140,7 +146,7 @@ export default function PropertiesPage() {
                             ].map((head) => (
                                 <StyledTableCell
                                     key={head}
-                                    sx={{ border: '1px solid #ccc', fontWeight: 'bold' }}
+                                    sx={{border: '1px solid #ccc', fontWeight: 'bold'}}
                                 >
                                     {head}
                                 </StyledTableCell>
@@ -151,7 +157,7 @@ export default function PropertiesPage() {
                     <TableBody>
                         {properties?.length === 0 ? (
                             <TableRow>
-                                <TableCell colSpan={10} align="center" sx={{ border: '1px solid #ccc' }}>
+                                <TableCell colSpan={10} align="center" sx={{border: '1px solid #ccc'}}>
                                     No properties found.
                                 </TableCell>
                             </TableRow>
@@ -160,12 +166,16 @@ export default function PropertiesPage() {
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((p) => (
                                     <StyledTableRow key={p._id}>
-                                        <StyledTableCell sx={{ border: '1px solid #ccc' }}>{p.title}</StyledTableCell>
-                                        <StyledTableCell sx={{ border: '1px solid #ccc' }}>{p.location}</StyledTableCell>
-                                        <StyledTableCell sx={{ border: '1px solid #ccc' }}>{p.rooms}</StyledTableCell>
-                                        <StyledTableCell sx={{ border: '1px solid #ccc' }}>{p.bathrooms}</StyledTableCell>
-                                        <StyledTableCell sx={{ border: '1px solid #ccc' }}>{p.size}</StyledTableCell>
-                                        <StyledTableCell sx={{ border: '1px solid #ccc' }}>
+                                        <StyledTableCell sx={{border: '1px solid #ccc'}}>{p.title}</StyledTableCell>
+                                        <StyledTableCell sx={{border: '1px solid #ccc'}}>{p.location}</StyledTableCell>
+                                        <StyledTableCell sx={{border: '1px solid #ccc'}}>{p.rooms}</StyledTableCell>
+                                        <StyledTableCell sx={{border: '1px solid #ccc'}}>{p.bathrooms}</StyledTableCell>
+                                        <StyledTableCell sx={{border: '1px solid #ccc'}}>{p.size}</StyledTableCell>
+                                        <StyledTableCell sx={{border: '1px solid #ccc'}}>{p.superArea}</StyledTableCell>
+                                        <StyledTableCell sx={{border: '1px solid #ccc'}}>
+                                            {p.carpetArea || "-"}
+                                        </StyledTableCell>
+                                        <StyledTableCell sx={{border: '1px solid #ccc'}}>
                                             <Box display="grid" gridTemplateColumns="repeat(2, 1fr)" gap={1}>
                                                 {(p.images || []).slice(0, 6).map((url, i) => (
                                                     <Box
@@ -183,22 +193,38 @@ export default function PropertiesPage() {
                                                 ))}
                                             </Box>
                                         </StyledTableCell>
-                                        <StyledTableCell sx={{ border: '1px solid #ccc' }}>{p.price}</StyledTableCell>
-                                        <StyledTableCell sx={{ border: '1px solid #ccc' }}>
+                                        <StyledTableCell sx={{border: '1px solid #ccc'}}>{p.price}</StyledTableCell>
+                                        <StyledTableCell sx={{border: '1px solid #ccc'}}>
                                             {p.retailPrice ?? "-"}
                                         </StyledTableCell>
-                                        <StyledTableCell sx={{ border: '1px solid #ccc' }}>{p.type}</StyledTableCell>
-                                        <TableCell sx={{ border: '1px solid #ccc' }}>
-                                            <Button
-                                                variant="contained"
-                                                size="small"
-                                                color="error"
-                                                sx={{ ml: 2 }}
-                                                onClick={() => setConfirmDelete(p._id)}
-                                            >
-                                                Delete
-                                            </Button>
+                                        <StyledTableCell sx={{border: '1px solid #ccc'}}>{p.type}</StyledTableCell>
+                                        <TableCell sx={{border: '1px solid #ccc'}}>
+                                            <Box sx={{display: "flex", gap: 1}}>
+                                                <Button
+                                                    variant="contained"
+                                                    size="small"
+                                                    color="primary"
+                                                    onClick={() => {
+                                                        setEditProperty(p);
+                                                        setLocalFormValues(p);
+                                                        setOpenModal(true);
+                                                    }}
+                                                >
+                                                    Edit
+                                                </Button>
+
+                                                <Button
+                                                    variant="contained"
+                                                    size="small"
+                                                    color="error"
+                                                    onClick={() => setConfirmDelete(p._id)}
+                                                >
+                                                    Delete
+                                                </Button>
+                                            </Box>
                                         </TableCell>
+
+
                                     </StyledTableRow>
                                 ))
                         )}
@@ -223,12 +249,13 @@ export default function PropertiesPage() {
                 open={openModal}
                 onClose={onClose}
                 onSubmit={handleSubmit}
-                property={editProperty}
+                formValues={editProperty || {type: "sale"}}
                 localFormValues={localFormValues}
                 setLocalFormValues={setLocalFormValues}
                 imageFiles={imageFiles}
                 setImageFiles={setImageFiles}
             />
+
 
             <ConfirmDialog
                 open={!!confirmDelete}
