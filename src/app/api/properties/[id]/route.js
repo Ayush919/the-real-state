@@ -24,3 +24,22 @@ export async function DELETE(req, { params }) {
         return NextResponse.json({ success: false, error: "Server error" }, { status: 500 });
     }
 }
+
+export async function PUT(req, { params }) {
+    await dbConnect();
+
+    try {
+        const body = await req.json();
+        const updated = await Property.findByIdAndUpdate(params.id, body, {
+            new: true,
+        });
+
+        if (!updated) {
+            return NextResponse.json({ message: "Property not found" }, { status: 404 });
+        }
+
+        return NextResponse.json(updated, { status: 200 });
+    } catch (err) {
+        return NextResponse.json({ error: err.message }, { status: 500 });
+    }
+}
