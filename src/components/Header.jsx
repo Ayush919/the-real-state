@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 import Image from "next/image";
-import logo from "../../public/ezLogo.png"
+import logo from "../../public/logo.png"
 
 const Header = () => {
     const [isOpen, setIsOpen] = useState(false)
