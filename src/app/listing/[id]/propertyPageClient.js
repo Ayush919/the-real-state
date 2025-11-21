@@ -83,13 +83,13 @@ export default function PropertyPageClient({ property }) {
 
 
                 {/* DESCRIPTION */}
-                <section className="w-full flex flex-col items-center my-8">
-                    <h2 className="text-2xl font-bold mb-4 text-center">Description</h2>
+                <div className="max-w-10xl mx-auto">
+                    <h2 className="text-center font-bold text-2xl">Description</h2>
 
-                    <p className="text-gray-700 text-lg leading-relaxed text-justify w-full max-w-4xl md:w-4/5">
+                    <p className="text-gray-900 text-lg leading-relaxed text-justify w-full">
                         {property.description}
                     </p>
-                </section>
+                </div>
 
 
                 {/* DETAILS, FEATURES, ETC... */}
