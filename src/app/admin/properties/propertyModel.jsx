@@ -31,20 +31,26 @@ export default function AddPropertyModal({
                                          }) {
     const [isValid, setIsValid] = useState(false);
     const [uploading, setUploading] = useState(false);
+    const [existingImages, setExistingImages] = useState([]);
+
 
     useEffect(() => {
-        if (!open) return; // only run when modal opens
+        if (!open) return;
 
         if (formValues?._id) {
-            // Editing
+            // Editing mode
             setLocalFormValues(formValues);
-            setImageFiles([]);
+
+            setExistingImages(formValues.images || []); // ← previously saved URLs
+            setImageFiles([]); // new uploads only
         } else {
-            // Adding new property
+            // Create mode
             setLocalFormValues({ type: "sale", features: [] });
+            setExistingImages([]);
             setImageFiles([]);
         }
     }, [open]);
+
 
 
     useEffect(() => {
@@ -56,7 +62,7 @@ export default function AddPropertyModal({
 
         if (name === "images") {
             const selectedFiles = Array.from(files);
-            setImageFiles(selectedFiles);
+            setImageFiles(prev => [...prev, ...selectedFiles]);
         } else if (name === "features") {
             // Ensure value is always an array
             setLocalFormValues((prev) => ({
@@ -69,6 +75,14 @@ export default function AddPropertyModal({
                 [name]: value,
             }));
         }
+    };
+
+    const removeExistingImage = (url) => {
+        setExistingImages(prev => prev.filter(img => img !== url));
+    };
+
+    const removeSelectedFile = (index) => {
+        setImageFiles(prev => prev.filter((_, i) => i !== index));
     };
 
 
@@ -113,16 +127,20 @@ export default function AddPropertyModal({
         try {
             setUploading(true);
 
-            let finalImageUrls = [...(formValues?.images || [])];
+            let uploadedUrls = [];
 
-            // If user uploaded new images → upload & replace URLs
             if (imageFiles.length > 0) {
-                finalImageUrls = await uploadToUploadcare();
+                uploadedUrls = await uploadToUploadcare();
             }
+
+            const finalImages = [
+                ...existingImages,  // remaining old images
+                ...uploadedUrls     // new uploaded ones
+            ];
 
             const finalFormData = {
                 ...localFormValues,
-                images: finalImageUrls,
+                images: finalImages
             };
 
             onSubmit(finalFormData);
@@ -131,15 +149,17 @@ export default function AddPropertyModal({
             onClose();
 
             setTimeout(() => {
+                setExistingImages([]);
                 setImageFiles([]);
                 setLocalFormValues({});
             }, 200);
 
-        } catch (error) {
-            console.error(error);
+        } catch (err) {
+            console.error(err);
             setUploading(false);
         }
     };
+
 
 
     return (
@@ -299,12 +319,12 @@ export default function AddPropertyModal({
                                 onChange={handleChange}
                             />
                         </Button>
-                        <Grid container spacing={2} mt={1}>
-                            {imageFiles.map((file, index) => (
-                                <Grid item xs={4} key={index}>
+                        <Grid container spacing={2} mt={2}>
+                            {/* Show Existing Images (URLs) */}
+                            {existingImages.map((url, index) => (
+                                <Grid item xs={4} key={index} style={{ position: "relative" }}>
                                     <img
-                                        src={URL.createObjectURL(file)}
-                                        alt={`preview-${index}`}
+                                        src={url}
                                         style={{
                                             width: "100%",
                                             height: 100,
@@ -312,9 +332,67 @@ export default function AddPropertyModal({
                                             borderRadius: 4,
                                         }}
                                     />
+
+                                    {/* Close Button */}
+                                    <span
+                                        onClick={() => removeExistingImage(url)}
+                                        style={{
+                                            position: "absolute",
+                                            top: 5,
+                                            right: 5,
+                                            cursor: "pointer",
+                                            background: "rgba(0,0,0,0.5)",
+                                            color: "#fff",
+                                            borderRadius: "50%",
+                                            width: 22,
+                                            height: 22,
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                        }}
+                                    >
+                ×
+            </span>
+                                </Grid>
+                            ))}
+
+                            {/* Show Newly Uploaded Images */}
+                            {imageFiles.map((file, index) => (
+                                <Grid item xs={4} key={index} style={{ position: "relative" }}>
+                                    <img
+                                        src={URL.createObjectURL(file)}
+                                        style={{
+                                            width: "100%",
+                                            height: 100,
+                                            objectFit: "cover",
+                                            borderRadius: 4,
+                                        }}
+                                    />
+
+                                    {/* Close Button */}
+                                    <span
+                                        onClick={() => removeSelectedFile(index)}
+                                        style={{
+                                            position: "absolute",
+                                            top: 5,
+                                            right: 5,
+                                            cursor: "pointer",
+                                            background: "rgba(0,0,0,0.5)",
+                                            color: "#fff",
+                                            borderRadius: "50%",
+                                            width: 22,
+                                            height: 22,
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                        }}
+                                    >
+                ×
+            </span>
                                 </Grid>
                             ))}
                         </Grid>
+
 
                     </Grid>
                     <Grid size={12} item xs={12}>
